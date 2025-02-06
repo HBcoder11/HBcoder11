@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro Clock</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(to right, #f04f5a, #f28a4c);
+            color: #fff;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            backdrop-filter: blur(5px);
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .timer-display {
+            font-size: 4em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .controls button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.5);
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .controls button:hover {
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+
+        .settings {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .settings label {
+            margin-bottom: 5px;
+            color: #fff;
+        }
+
+        .settings input {
+            width: 50px;
+            padding: 5px;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+        .world-clock {
+            margin-top: 20px;
+            text-align: center; /* Center the clock */
+        }
+
+        #worldClockDisplay {
+            font-size: 1.2em; /* Adjust font size as needed */
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Pomodoro Clock</h1>
+        <div class="timer-display">
+            <span id="minutes">25</span>:<span id="seconds">00</span>
+        </div>
+        <div class="controls">
+            <button id="startBtn">Start</button>
+            <button id="pauseBtn">Pause</button>
+            <button id="resetBtn">Reset</button>
+        </div>
+        <div class="settings">
+            <label for="workTime">Work Time:</label>
+            <input type="number" id="workTime" value="25" min="1">
+            <label for="breakTime">Break Time:</label>
+            <input type="number" id="breakTime" value="5" min="1">
+        </div>
+        <div class="world-clock">
+            <h2>World Clock</h2>
+            <div id="IndiaClockDisplay"></div>  
+        </div>
+    </div>
+
+    <script>
+        const minutesDisplay = document.getElementById('minutes');
+        const secondsDisplay = document.getElementById('seconds');
+        const startBtn = document.getElementById('startBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const workTimeInput = document.getElementById('workTime');
+        const breakTimeInput = document.getElementById('breakTime');
+        const IndiaClockDisplay= document.getElementById('IndiaClockDisplay');
+
+
+        let startTime = 25 * 60;
+        let timerInterval;
+        let isRunning = false;
+        let isWorkTime = true;
+
+        function updateDisplay() {
+            const minutes = Math.floor(startTime / 60);
+            const seconds = startTime % 60;
+            minutesDisplay.textContent = minutes.toString().padStart(2, '0');
+            secondsDisplay.textContent = seconds.toString().padStart(2, '0');
+        }
+
+        function startTimer() {
+            if (!isRunning) {
+                isRunning = true;
+                timerInterval = setInterval(decrementTime, 1000);
+            }
+        }
+
+        function pauseTimer() {
+            if (isRunning) {
+                isRunning = false;
+                clearInterval(timerInterval);
+            }
+        }
+
+        function resetTimer() {
+            isRunning = false;
+            clearInterval(timerInterval);
+            isWorkTime = true;
+            startTime = parseInt(workTimeInput.value) * 60;
+            updateDisplay();
+        }
+
+        function decrementTime() {
+            startTime--;
+
+            if (startTime < 0) {
+                clearInterval(timerInterval);
+                isRunning = false;
+                isWorkTime = !isWorkTime;
+
+                if (isWorkTime) {
+                    startTime = parseInt(workTimeInput.value) * 60;
+                } else {
+                    startTime = parseInt(breakTimeInput.value) * 60;
+                }
+
+                updateDisplay();
+                startTimer();
+            } else {
+                updateDisplay();
+            }
+        }
+
+        startBtn.addEventListener('click', startTimer);
+        pauseBtn.addEventListener('click', pauseTimer);
+        resetBtn.addEventListener('click', resetTimer);
+
+        updateDisplay();
+
+        function updateWorldClock() {
+            const now = new Date();
+            const KolkataTime = now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
+            IndiaClockDisplay.textContent = KolkataTime;
+            setInterval(updateWorldClock, 1000);
+        }
+
+        updateWorldClock();
+    </script>
+</body>
+</html>
