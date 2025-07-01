@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Music Player</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <div class="music-player-container">
+        <div class="header">
+            <h1>Music Maven</h1>
+        </div>
+
+        <div class="playlist-section">
+            <h2>Playlist</h2>
+            <ul id="playlist">
+                </ul>
+            <input type="file" id="addFilesInput" accept="audio/*" multiple style="display: none;">
+            <button id="addMusicBtn">Add Music</button>
+        </div>
+
+        <div class="player-controls-section">
+            <div class="current-song-info">
+                <h3 id="currentSongTitle">No song selected</h3>
+                <p id="currentTime">0:00</p>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                <p id="totalTime">0:00</p>
+            </div>
+
+            <div class="controls">
+                <button id="prevBtn" class="control-btn"><i class="fas fa-backward"></i></button>
+                <button id="playPauseBtn" class="control-btn play-pause"><i class="fas fa-play"></i></button>
+                <button id="nextBtn" class="control-btn"><i class="fas fa-forward"></i></button>
+            </div>
+
+            <div class="volume-control">
+                <i class="fas fa-volume-down"></i>
+                <input type="range" id="volumeSlider" min="0" max="100" value="70">
+                <i class="fas fa-volume-up"></i>
+            </div>
+        </div>
+    </div>
+
+    <audio id="audioPlayer"></audio>
+    <script src="script.js"></script>
+</body>
+</html>
